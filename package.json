@@ -1,0 +1,11 @@
+{
+  "name": "disc",
+  "version": "2.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Teste DISC grátis com relatório em PDF e captura de cadastro",
+  "engines": { "node": "22.x" },
+  "dependencies": {
+    "@vercel/blob": "2.8.2"
+  }
+}

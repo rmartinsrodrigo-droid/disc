@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Teste de perfil comportamental DISC com relatório completo em PDF.">
+<title>Teste DISC Completo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: coluna única, uma etapa por tela; relatório em seções empilhadas com quatro gráficos DISC lado a lado */
+:root{
+  --bg:#F4F5F7; --surface:#FFFFFF; --ink:#15181E; --muted:#5B6270; --line:#DDE0E6; --soft:#ECEEF2;
+  --d:#B5402E; --i:#C2850F; --s:#3B8457; --c:#2E5C9A;
+  --d-bg:#F7E7E3; --i-bg:#F8EFD9; --s-bg:#E3F0E7; --c-bg:#E2EAF5;
+  --ok:#3B8457; --warn:#B7791F; --bad:#B5402E;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Figtree","Segoe UI",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12141A; --surface:#1B1E26; --ink:#ECEEF2; --muted:#9AA1AE; --line:#2C303B; --soft:#232731;
+  --d:#E2735F; --i:#E3AC3E; --s:#62B582; --c:#6E9BDB;
+  --d-bg:#3A221E; --i-bg:#3A2F17; --s-bg:#1D3326; --c-bg:#1C2A3E;
+  --ok:#62B582; --warn:#E3AC3E; --bad:#E2735F; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#12141A; --surface:#1B1E26; --ink:#ECEEF2; --muted:#9AA1AE; --line:#2C303B; --soft:#232731;
+  --d:#E2735F; --i:#E3AC3E; --s:#62B582; --c:#6E9BDB;
+  --d-bg:#3A221E; --i-bg:#3A2F17; --s-bg:#1D3326; --c-bg:#1C2A3E;
+  --ok:#62B582; --warn:#E3AC3E; --bad:#E2735F; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+[hidden]{display:none!important}
+html,body{background:var(--bg)}
+body{color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding-inline:16px;padding-block:28px 120px}
+h1,h2,h3{font-family:var(--display);line-height:1.12;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,7vw,2.8rem);font-weight:800;letter-spacing:-0.02em}
+h2{font-size:1.4rem;font-weight:700;letter-spacing:-0.01em}
+h3{font-size:1.05rem;font-weight:700}
+p{margin:0}
+.eyebrow{font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lead{font-size:1.04rem;color:var(--muted);max-width:62ch}
+.note{font-size:.86rem;color:var(--muted)}
+.stack{display:flex;flex-direction:column;gap:14px}
+.stack-lg{display:flex;flex-direction:column;gap:30px}
+.sec{display:flex;flex-direction:column;gap:14px;padding-top:6px}
+.sec>h2{padding-bottom:8px;border-bottom:1px solid var(--line)}
+.letters{display:flex;gap:6px}
+.letters span{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:1.15rem;color:#fff}
+.bg-d{background:var(--d)}.bg-i{background:var(--i)}.bg-s{background:var(--s)}.bg-c{background:var(--c)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.blocks{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.blocks li{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.blocks b.n{font-family:var(--display);font-size:1.3rem;width:30px}
+.blocks small{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+label.field{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.92rem}
+input[type=text],input[type=email]{font:inherit;font-size:1rem;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:100%}
+.btn{font:inherit;font-weight:700;font-size:1rem;border:0;border-radius:11px;padding:14px 22px;background:var(--ink);color:var(--bg);cursor:pointer;min-height:50px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+
+/* quiz */
+.qhead{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding-block:12px;z-index:5;display:flex;flex-direction:column;gap:8px}
+.qmeta{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.qcount{font-weight:700;font-variant-numeric:tabular-nums}
+.bar{height:6px;background:var(--soft);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink);border-radius:99px;transition:width .3s ease}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.qcols{display:grid;grid-template-columns:1fr 70px 70px;gap:8px;padding:11px 16px;border-bottom:1px solid var(--line);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.qcols span:not(:first-child){text-align:center}
+.qrow{display:grid;grid-template-columns:1fr 70px 70px;gap:8px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line)}
+.qrow:last-child{border-bottom:0}
+.qword{font-weight:600;font-size:1.04rem;min-width:0}
+.pick{font:inherit;font-weight:700;font-size:.84rem;height:44px;border-radius:10px;border:1.5px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.pick.most.on{background:var(--s);border-color:var(--s);color:#fff}
+.pick.least.on{background:var(--d);border-color:var(--d);color:#fff}
+.rank{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;width:100%;text-align:left;font:inherit;padding:14px 16px;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.rank:last-child{border-bottom:0}
+.rank .badge{width:34px;height:34px;border-radius:50%;border:1.5px dashed var(--line);display:grid;place-items:center;font-family:var(--display);font-weight:800;color:var(--muted)}
+.rank.on .badge{border-style:solid;border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.rank .lab{font-size:.78rem;color:var(--muted);text-align:right}
+.lk{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.lk:last-child{border-bottom:0}
+.lk p{font-weight:600}
+.lkopts{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.lkopts button{font:inherit;font-weight:700;height:42px;border-radius:9px;border:1.5px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.lkopts button.on{background:var(--c);border-color:var(--c);color:#fff}
+.lkleg{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
+.lksel{font-size:.8rem;color:var(--c);min-height:1.2em}
+.qfoot{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));z-index:10}
+.qfoot .in{max-width:720px;margin:0 auto;display:flex;gap:10px}
+.qfoot .next{flex:1}
+.hint{font-size:.88rem;color:var(--muted);min-height:1.4em}
+
+/* resultado */
+.code{font-family:var(--display);font-weight:800;font-size:2.2rem;line-height:1;letter-spacing:-0.02em}
+.codes{display:flex;gap:24px;flex-wrap:wrap}
+.codes>div{display:flex;flex-direction:column;gap:2px}
+.g4{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.g4{grid-template-columns:1fr}}
+.mini{display:flex;flex-direction:column;gap:8px;min-width:0}
+.mini .ch{position:relative;height:120px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:end;border-bottom:1px solid var(--line)}
+.mini .ch .mid{position:absolute;left:0;right:0;top:50%;border-top:1.5px dashed var(--line)}
+.mini .col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:3px;position:relative;z-index:1}
+.mini .col span{font-size:.78rem;font-weight:700;font-variant-numeric:tabular-nums}
+.mini .col i{display:block;width:100%;max-width:44px;border-radius:5px 5px 2px 2px}
+.mini .ax{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;font-family:var(--display);font-weight:800}
+.mini .dv{position:relative;height:120px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;border-bottom:1px solid var(--line)}
+.mini .dv .zero{position:absolute;left:0;right:0;top:50%;border-top:1.5px solid var(--line)}
+.mini .dv .col{justify-content:flex-start;position:relative}
+.mini .dv .col i{position:absolute;max-width:44px;width:100%}
+.mini .dv .col span{position:absolute;width:100%;text-align:center}
+.rel{border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);background:var(--surface)}
+.rel .pill{align-self:flex-start;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:99px;color:#fff}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{font:inherit;font-size:.86rem;font-weight:600;padding:8px 12px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.factor{display:grid;grid-template-columns:44px 1fr;gap:14px;padding-block:14px;border-top:1px solid var(--line)}
+.factor:first-child{border-top:0;padding-top:2px}
+.factor .tag{width:44px;height:44px;border-radius:11px;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:1.25rem;color:#fff}
+.factor .txt{min-width:0;display:flex;flex-direction:column;gap:5px}
+.lvl{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--muted);margin-left:6px;vertical-align:2px}
+.meter{height:6px;background:var(--soft);border-radius:99px;overflow:hidden}
+.meter i{display:block;height:100%;border-radius:99px}
+.subs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.subs{grid-template-columns:1fr}}
+.sub{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:7px;min-width:0}
+.sub .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sub .pct{font-family:var(--display);font-weight:800;font-size:1.25rem;font-variant-numeric:tabular-nums}
+.sub details{font-size:.9rem}
+.sub summary{cursor:pointer;font-weight:600;color:var(--muted)}
+.sub ol{margin:8px 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.tal{display:grid;grid-template-columns:1fr 1fr;gap:4px 20px}
+@media (max-width:560px){.tal{grid-template-columns:1fr}}
+.tal div{display:grid;grid-template-columns:1fr 70px 38px;gap:8px;align-items:center;font-size:.9rem;padding-block:4px}
+.tal div.me{font-weight:700}
+.tal em{font-style:normal;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.cmp{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.92rem}
+.cmp th,.cmp td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:center}
+.cmp th:first-child,.cmp td:first-child{text-align:left}
+.cmp th{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.grid2{grid-template-columns:1fr}}
+ul.list{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px}
+.kv{display:flex;flex-direction:column;gap:4px}
+.kv .k{font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.callout{border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.actions .btn{flex:1 1 200px}
+textarea.copyfb{width:100%;min-height:160px;font:inherit;font-size:.85rem;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.consent{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;font-size:.88rem;color:var(--muted);cursor:pointer}
+.consent input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--ink)}
+.foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px;padding-top:14px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;font-size:.9rem;z-index:20}
+.met dt{font-weight:700;margin-top:10px}
+.met dd{margin:2px 0 0;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <section id="intro" class="stack-lg">
+    <div class="stack">
+      <div class="letters" aria-hidden="true"><span class="bg-d">D</span><span class="bg-i">I</span><span class="bg-s">S</span><span class="bg-c">C</span></div>
+      <span class="eyebrow">Teste grátis · relatório em PDF</span>
+      <h1>Teste de Perfil Comportamental DISC</h1>
+      <p class="lead">Três blocos de perguntas, entre 15 e 20 minutos. No final você recebe um relatório com quatro gráficos DISC, 12 subfatores de comportamento, seu talento mais próximo entre 24 perfis de referência, a leitura de cada fator e um plano de desenvolvimento. Dá para baixar tudo em PDF.</p>
+    </div>
+    <ul class="blocks">
+      <li><b class="n">1</b><span><b>Como você é</b><br><span class="note">20 grupos de palavras para colocar em ordem</span></span><small>8 a 10 min</small></li>
+      <li><b class="n">2</b><span><b>O que o seu trabalho pede</b><br><span class="note">12 grupos com Mais e Menos</span></span><small>3 a 4 min</small></li>
+      <li><b class="n">3</b><span><b>Situações do dia a dia</b><br><span class="note">34 frases para dizer o quanto concorda</span></span><small>4 a 5 min</small></li>
+    </ul>
+    <div class="panel stack">
+      <h3>Antes de começar</h3>
+      <ul class="list">
+        <li>Responda num momento tranquilo, sem interrupções.</li>
+        <li>Vá pela primeira impressão. Não existe resposta certa, errada, boa ou ruim.</li>
+        <li>Responda como você é de verdade, não como gostaria de ser.</li>
+        <li>O teste tem algumas checagens de atenção e de coerência. Ler com calma deixa o resultado mais confiável.</li>
+        <li>Se precisar parar, o progresso fica salvo neste navegador.</li>
+      </ul>
+    </div>
+    <div class="stack">
+      <label class="field" for="nome">Seu nome
+        <input type="text" id="nome" autocomplete="name" placeholder="Como você quer aparecer no relatório" maxlength="80">
+      </label>
+      <label class="field" for="email">Seu e-mail
+        <input type="email" id="email" autocomplete="email" inputmode="email" placeholder="nome@empresa.com" maxlength="120">
+      </label>
+      <label class="consent" for="consent"><input type="checkbox" id="consent"><span>Concordo que meu nome e e-mail sejam armazenados para identificar meu resultado e para eventual contato sobre o teste. Meus dados não serão compartilhados com terceiros.</span></label>
+      <p class="hint" id="start-hint" aria-live="polite"></p>
+      <button class="btn" id="start" disabled>Começar o teste grátis</button>
+      <button class="btn ghost" id="resume" hidden>Continuar de onde parei</button>
+      <p class="note">Ferramenta de autoconhecimento baseada no modelo DISC de William Marston. Ela descreve estilos de comportamento e não mede inteligência, caráter ou competência técnica.</p>
+    </div>
+  </section>
+
+  <section id="part" class="stack-lg" hidden>
+    <div class="stack">
+      <span class="eyebrow" id="p-eye">Bloco 1 de 3</span>
+      <h1 id="p-title"></h1>
+      <p class="lead" id="p-text"></p>
+    </div>
+    <div class="panel stack" id="p-how"></div>
+    <button class="btn" id="p-go">Começar este bloco</button>
+  </section>
+
+  <section id="quiz" hidden>
+    <div class="qhead">
+      <div class="qmeta"><span class="qcount" id="qcount"></span><span class="note" id="qpct"></span></div>
+      <div class="bar"><i id="qbar"></i></div>
+    </div>
+    <div class="stack" style="margin-top:6px">
+      <p class="note" id="qask"></p>
+      <div class="qcard" id="qcard"></div>
+      <p class="hint" id="hint" aria-live="polite"></p>
+    </div>
+    <div class="qfoot"><div class="in">
+      <button class="btn ghost" id="back">Voltar</button>
+      <button class="btn next" id="next" disabled>Próximo</button>
+    </div></div>
+  </section>
+
+  <section id="result" class="stack-lg" hidden></section>
+</div>
+<footer class="foot wrap" style="padding-block:0 32px"><span>Teste DISC · <span id="ver">v2.1.0</span></span><span>Seus dados ficam protegidos e não são compartilhados.</span></footer>
+<div class="toast" id="toast" hidden></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
